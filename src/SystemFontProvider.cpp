@@ -144,7 +144,13 @@ public:
             if (!s.ok()) return s;
         }
 
-        std::wstring familyW = fontFamily.empty() ? L"Microsoft YaHei" : Utf8ToUtf16(fontFamily);
+        auto resolveSystemFamilyW = [](std::string_view fam) -> std::wstring {
+            if (fam.empty() || fam[0] == '@' || fam == "system-ui" || fam == "sans-serif") {
+                return L"Microsoft YaHei";
+            }
+            return Utf8ToUtf16(fam);
+        };
+        std::wstring familyW = resolveSystemFamilyW(fontFamily);
         DWRITE_FONT_WEIGHT dWeight = static_cast<DWRITE_FONT_WEIGHT>(weight * 100);
         if (dWeight < DWRITE_FONT_WEIGHT_THIN) dWeight = DWRITE_FONT_WEIGHT_NORMAL;
         DWRITE_FONT_STYLE dStyle = italic ? DWRITE_FONT_STYLE_ITALIC : DWRITE_FONT_STYLE_NORMAL;
@@ -222,7 +228,13 @@ public:
             batch.metrics = fmOr.value();
         }
 
-        std::wstring familyW = fontFamily.empty() ? L"Microsoft YaHei" : Utf8ToUtf16(fontFamily);
+        auto resolveSystemFamilyW = [](std::string_view fam) -> std::wstring {
+            if (fam.empty() || fam[0] == '@' || fam == "system-ui" || fam == "sans-serif") {
+                return L"Microsoft YaHei";
+            }
+            return Utf8ToUtf16(fam);
+        };
+        std::wstring familyW = resolveSystemFamilyW(fontFamily);
         DWRITE_FONT_WEIGHT dWeight = static_cast<DWRITE_FONT_WEIGHT>(weight * 100);
         if (dWeight < DWRITE_FONT_WEIGHT_THIN) dWeight = DWRITE_FONT_WEIGHT_NORMAL;
         DWRITE_FONT_STYLE dStyle = italic ? DWRITE_FONT_STYLE_ITALIC : DWRITE_FONT_STYLE_NORMAL;
